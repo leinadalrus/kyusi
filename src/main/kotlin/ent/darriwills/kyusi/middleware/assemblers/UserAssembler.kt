@@ -15,6 +15,6 @@ public class UserAssembler
     public fun EntityModel<User> toModel(User user) {
         return EntityModel.of(user,
             linkTo(methodOn(UserController.class).findById(user.getId())).withSelfRel(),
-            linkTo(methodOn(UserController.class).findAll()).withRel("user"))
+            linkTo(methodOn(UserController.class).findAll()).withRel("users"))
     }
 }

@@ -22,25 +22,25 @@ public class UserController(val repository: UserRepository,
     val assembler: UserAssembler
 ) {
     @GetMapping("/users/{id}")
-    fun findById(@PathVariable val id: Long): EntityModel<users> {
-        users users = repository.findById(id)
-            .orElseThrow(() -> new usersNotFoundException(id))
+    fun findById(@PathVariable val id: Long): EntityModel<User> {
+        User user = repository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException(id))
 
-        return assembler.toModel(users)
+        return assembler.toModel(user)
     }
 
-    fun findAll(): CollectionModel<EntityModel<users>> {
-        List<EntityModel<users>> = repository.findAll().stream()
+    fun findAll(): CollectionModel<EntityModel<User>> {
+        List<EntityModel<User>> model = repository.findAll().stream()
             .map(assembler::toModel)
             .collect(Collectors.toList())
         
-        return CollectionModel.of(users,
-            linkTo(methodOn(usersController.class).all()).withSelfRel())
+        return CollectionModel.of(model,
+            linkTo(methodOn(UserController.class).all()).withSelfRel())
     }
 
     @PostMapping("/users")
-    fun createUser(@RequestBody val newUser: users): ResponseEntity<?> {
-        EntityModel<users> model = assembler.toModel(repository.save(newUser))
+    fun createUser(@RequestBody val newUser: User): ResponseEntity<?> {
+        EntityModel<User> model = assembler.toModel(repository.save(newUser))
 
         return ResponseEntity
             .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -49,19 +49,18 @@ public class UserController(val repository: UserRepository,
 
 
     @PutMapping("/users/{id}")
-    fun updateUser(@RequestBody val newUser: users,
+    fun updateUser(@RequestBody val newUser: User,
         @PathVariable val id: Long
     ): ResponseEntity<?> {
-        users updatedUser = repository.findById(id)
+        User updatedUser = repository.findById(id)
             .map(user -> {
                 user.setName(newUser.getName())
-                user.setDescription(newUser.getDescription())
             })
             .orElseGet(() -> {
                 return repository.save(newUser)
             })
 
-        EntityModel<users> model = assembler.toModel(updatedUser)
+        EntityModel<User> model = assembler.toModel(updatedUser)
 
         return ResponseEntity
             .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
