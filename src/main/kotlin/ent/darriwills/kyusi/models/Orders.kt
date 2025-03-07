@@ -1,6 +1,14 @@
 package ent.darriwills.kyusi.models;
 
+import java.util.Objects;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 @Entity
+@Table(name = "CUSTOMER_ORDERS")
 public class Orders(
     @Id @GeneratedValue var id: Long? = null,
     @ManyToOne var author: User,

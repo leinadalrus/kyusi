@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 import ent.darriwills.kyusi.data.repository.ProductsRepository
 import ent.darriwills.kyusi.middleware.assemblers.ProductsAssembler
+import ent.darriwills.kyusi.middleware.exceptions.ProductsNotFoundException
 import ent.darriwills.kyusi.models.Products
 
 @RestController
